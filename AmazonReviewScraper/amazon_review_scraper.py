@@ -8,7 +8,7 @@ from datetime import date
 from typing import List
 from time import sleep
 # custom review container
-from models import Review, Product
+from models import Review
 import logging
 
 HEADERS = ({'User-Agent':
@@ -20,7 +20,7 @@ BASEURL_REVIEW = "https://www.amazon.com/product-reviews"
 DELAY = 0.8
 
 
-class ReviewScraper():
+class ProductReviewScraper():
     '''Class that scrape the reviews of the product with given asin from the amazon website'''
 
     def __init__(self, asin: str, sort: str = 'recent', verbose: bool = False, max_scrape=None) -> None:
@@ -96,7 +96,6 @@ class ReviewScraper():
         self.logger.info(f"Scraped the review by user {user}. ")
 
         return Review(**{"user": user,
-                         "asin": self.asin,
                          "rating": rating,
                          "title": title,
                          "date": date,
@@ -153,28 +152,10 @@ class ReviewScraper():
             " ")[0].replace("one", "1").replace(",", "").replace(".", "")
         return(int(helpfulvote_number))
 
-    def get_summary(self):
-        '''Scrape the summary of the product from the first page'''
-        r = requests.get(self.get_url(1), headers=HEADERS)
-        product_page = bsoup(r.text, 'html.parser')
-
-        product_name = product_page.find(
-            "div", class_="product-title").get_text().strip()
-
-        producer_name_raw = product_page.find(
-            "div", class_="product-by-line").get_text().strip()
-        producer_name = producer_name_raw[2:]
-
-        average_review_raw = product_page.find(
-            "span", {"data-hook": "rating-out-of-text"}).get_text().strip()
-        average_review = float(average_review_raw.split(" ")[0])
-
-        return Product(asin=self.asin, product=product_name,
-                       producer=producer_name, average_review=average_review,
-                       me=None)
-
 
 if __name__ == "__main__":
-    ars = ReviewScraper(asin="B07L32B9C2", sort="helpful",
-                        max_scrape=2, verbose=True)
+    logging.basicConfig(filename='scrape_review.log', filemode='w',
+                        format='%(asctime)s AMAZON-SCRAPER: %(message)s', level=logging.INFO)
+    ars = ProductReviewScraper(asin="B07L32B9C2", sort="helpful",
+                               max_scrape=2, verbose=True)
     print(ars.get_reviews())

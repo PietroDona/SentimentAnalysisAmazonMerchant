@@ -20,7 +20,7 @@ BASEURL_MERCHANT = "https://www.amazon.com/s?i=merchant-items"
 DELAY = 0.8
 
 
-class MerchantScraper():
+class MerchantItemsScraper():
     '''Class that scrape the items sold by a merchant with me from the amazon website'''
 
     def __init__(self, me: str, verbose: bool = False, max_scrape=None) -> None:
@@ -84,8 +84,8 @@ class MerchantScraper():
 
         self.logger.info(f"Scraped the product with asin {asin}. ")
 
-        return Product(asin=asin, product=product_name, me=self.me,
-                       average_review=float(average_review_raw), producer=None)
+        return Product(asin=asin, title=product_name,
+                       average_review=float(average_review_raw))
 
     def get_clean_title(self, item: Tag) -> str:
         '''Clean the title from the HTML'''
@@ -95,5 +95,8 @@ class MerchantScraper():
 
 
 if __name__ == "__main__":
-    ams = MerchantScraper(me="A294P4X9EWVXLJ", max_scrape=2, verbose=True)
+    logging.basicConfig(filename='scrape_merchant.log', filemode='w',
+                        format='%(asctime)s AMAZON-SCRAPER: %(message)s',
+                        level=logging.INFO)
+    ams = MerchantItemsScraper(me="A294P4X9EWVXLJ", max_scrape=2, verbose=True)
     print(ams.get_items())
