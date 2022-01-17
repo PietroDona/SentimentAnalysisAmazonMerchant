@@ -5,7 +5,7 @@ from bs4.element import Tag
 # date parsing and typing
 from typing import List
 # custom review container
-from models import Product
+from AmazonReviewScraper.models import Product
 
 from time import sleep
 import logging
@@ -41,8 +41,9 @@ class MerchantItemsScraper():
         self.logger.info(f"Start scraping the products of {self.me}... ")
         while True:
             # chack page limit
-            if page > self.max_scrape:
-                break
+            if self.max_scrape:
+                if page > self.max_scrape:
+                    break
             # scrape the page
             page_list = self.get_page(page)
             # check if empty

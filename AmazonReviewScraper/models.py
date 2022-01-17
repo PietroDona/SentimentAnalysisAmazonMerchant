@@ -1,10 +1,11 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import date
-from typing import Optional
+from typing import Optional, List
 
 
 @dataclass
 class Review():
+    id: int = field(init=False)
     user: str
     rating: int
     title: str
@@ -12,6 +13,7 @@ class Review():
     verified: bool
     content: str
     helpfulvote: Optional[int]
+    product_id: int = field(init=False)
 
     def dict(self):
         return {"user": self.user,
@@ -32,9 +34,15 @@ class Review():
 
 @dataclass
 class Product():
+    id: int = field(init=False)
     asin: str
     title: str
     average_review: float
+    merchant_id: int = field(init=False)
+    reviews: List[Review] = field(default_factory=list)
+
+    def reviews_number(self):
+        return len(self.reviews)
 
     def __repr__(self):
         return f"Product: {self.asin}  - {self.title}"
@@ -45,8 +53,10 @@ class Product():
 
 @dataclass
 class Merchant():
+    id: int = field(init=False)
     name: str
     me: str
+    products: List[Product] = field(default_factory=list)
 
     def __repr__(self):
         return f"Merchant: {self.name}  - {self.me}"
