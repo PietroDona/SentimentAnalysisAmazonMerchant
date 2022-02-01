@@ -5,7 +5,7 @@
 test.ipynb
 
 # Environment
-scraper-env/
+scrapeamazon/
 
 # Cache
 __pycache__/
