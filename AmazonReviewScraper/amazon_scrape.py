@@ -24,7 +24,9 @@ if __name__ == "__main__":
 
     anker.products = products_list
     for product in products_list:
-        ars = ProductReviewScraper(asin=product.asin, sort="helpful", verbose=True)
+        ars = ProductReviewScraper(
+            asin=product.asin, sort="helpful", verbose=True, max_scrape=None
+        )
         reviews = ars.get_reviews()
         product.reviews = reviews
         db.session.add_all(reviews)
