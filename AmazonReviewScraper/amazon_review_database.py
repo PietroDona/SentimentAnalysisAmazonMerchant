@@ -1,5 +1,5 @@
 from AmazonReviewScraper.models import Merchant, Product, Review
-
+from AmazonReviewScraper.config import DBNAME
 from sqlalchemy import create_engine, MetaData, Table
 from sqlalchemy import Column, Integer, String, Float, Date, Boolean, ForeignKey
 from sqlalchemy.orm import sessionmaker, registry, relationship
@@ -38,7 +38,7 @@ review_table = Table(
 
 
 # connection
-engine = create_engine("sqlite:///reviews.db")
+engine = create_engine(f"sqlite:///{DBNAME}")
 
 # create metadata
 metadata.create_all(engine)
