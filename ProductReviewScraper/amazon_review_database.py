@@ -1,38 +1,35 @@
-from AmazonReviewScraper.models import Merchant, Product, Review
-from AmazonReviewScraper.config import DBNAME
+from ProductReviewScraper.models import Product, Review
+from ProductReviewScraper.config import DBNAME
 from sqlalchemy import create_engine, MetaData, Table
 from sqlalchemy import Column, Integer, String, Float, Date, Boolean, ForeignKey
 from sqlalchemy.orm import sessionmaker, registry, relationship
 
 
 metadata = MetaData()
-merchant_table = Table(
-    "merchants",
-    metadata,
-    Column("id", Integer, primary_key=True, autoincrement=True),
-    Column("me", String(255)),
-    Column("name", String(255)),
-)
+
 product_table = Table(
     "products",
     metadata,
     Column("id", Integer, primary_key=True, autoincrement=True),
     Column("asin", String(255)),
     Column("title", String(255)),
-    Column("average_review", Float),
-    Column("merchant_id", Integer, ForeignKey("merchants.id")),
+    Column("imageurl", String(255)),
+    Column("price", Float),
+    Column("global_ratings", Integer),
 )
 review_table = Table(
     "reviews",
     metadata,
     Column("id", Integer, primary_key=True, autoincrement=True),
+    Column("amazonid", String(255)),
     Column("user", String(255)),
     Column("rating", Integer),
     Column("title", String(255)),
     Column("date", Date),
     Column("verified", Boolean),
+    Column("foreign", Boolean),
     Column("content", String(255)),
-    Column("helpfulvote", Integer, nullable=True),
+    Column("helpfulvote", Integer, default=0),
     Column("product_id", Integer, ForeignKey("products.id")),
 )
 
@@ -44,15 +41,7 @@ engine = create_engine(f"sqlite:///{DBNAME}")
 metadata.create_all(engine)
 
 mapper_registry = registry()
-mapper_registry.map_imperatively(
-    Merchant,
-    merchant_table,
-    properties={
-        "products": relationship(
-            Product, backref="merchant", order_by=product_table.c.id
-        ),
-    },
-)
+
 mapper_registry.map_imperatively(
     Product,
     product_table,

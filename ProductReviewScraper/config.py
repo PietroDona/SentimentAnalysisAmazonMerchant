@@ -6,5 +6,6 @@ HEADERS = {
 }
 BASEURL_REVIEW = "https://www.amazon.com/product-reviews"
 BASEURL_MERCHANT = "https://www.amazon.com/s?i=merchant-items"
-DELAY = 0.5
+BASEURL_PRODUCT = "https://www.amazon.com/dp"
+DELAY = 0.7
 DBNAME = "reviews.db"

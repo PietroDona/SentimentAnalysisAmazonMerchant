@@ -1,9 +1,8 @@
 # custom review container
-from AmazonReviewScraper.models import Merchant
 
-from AmazonReviewScraper.amazon_merchant_scraper import MerchantItemsScraper
-from AmazonReviewScraper.amazon_review_scraper import ProductReviewScraper
-import AmazonReviewScraper.amazon_review_database as db
+from ProductReviewScraper.amazon_product_scraper import ProductDetailsScraper
+from ProductReviewScraper.amazon_review_scraper import ProductReviewsScraper
+import ProductReviewScraper.amazon_review_database as db
 import logging
 
 
@@ -14,40 +13,27 @@ def main_scrape():
         format="%(asctime)s AMAZON-SCRAPER: %(message)s",
         level=logging.INFO,
     )
-    anker = Merchant(me="A294P4X9EWVXLJ", name="Anker")
-    db.session.add(anker)
-    db.session.commit()
 
-    ams = MerchantItemsScraper(me=anker.me, max_scrape=1, verbose=True)
-    products_list = ams.get_items()
-    db.session.add_all(products_list)
-    db.session.commit()
 
-    anker.products = products_list
-    for product in products_list:
-        ars = ProductReviewScraper(
-            asin=product.asin, sort="helpful", verbose=True, max_scrape=None
+# "B082V6C83P", "B07QGWY83T", "B07DQWT15Y", "B08N5LFLC3", "B0831BF1FH"
+    asin_list = ["B000X457HO", "B000JDGC78", "B01N0RSCBI", "B000WUFVR0"]
+
+    for strasin in asin_list:
+        aps = ProductDetailsScraper(asin=strasin)
+        product = aps.get_product_info()
+
+        ars = ProductReviewsScraper(
+            asin=product.asin, sort="recent"
         )
         reviews = ars.get_reviews()
-        product.reviews = reviews
+
+        missing_review = [r for r in reviews if r not in product.reviews]
+        product.reviews += missing_review
+
+        db.session.add(product)
         db.session.add_all(reviews)
         db.session.commit()
 
 
-def product_test():
-    logging.basicConfig(
-        filename="scrape.log",
-        filemode="w",
-        format="%(asctime)s AMAZON-SCRAPER: %(message)s",
-        level=logging.INFO,
-    )
-
-    ars = ProductReviewScraper(
-        asin="B07L32B9C2", sort="helpful", verbose=True, max_scrape=None
-    )
-    reviews = ars.get_reviews()
-    print(reviews)
-
-
 if __name__ == "__main__":
-    product_test()
+    main_scrape()

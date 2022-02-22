@@ -6,11 +6,13 @@ from typing import Optional, List
 @dataclass
 class Review():
     id: int = field(init=False)
+    amazonid: str
     user: str
     rating: int
     title: str
     date: date
     verified: bool
+    foreign: bool
     content: str
     helpfulvote: Optional[int]
     product_id: int = field(init=False)
@@ -37,29 +39,20 @@ class Product():
     id: int = field(init=False)
     asin: str
     title: str
-    average_review: float
-    merchant_id: int = field(init=False)
+    imageurl: str
+    price: float
+    global_ratings: int
     reviews: List[Review] = field(default_factory=list)
 
     def reviews_number(self):
         return len(self.reviews)
 
+    def find_review(self, user):
+        filter_review = [r for r in self.reviews if r.user == user]
+        return filter_review[0] if filter_review else None
+
     def __repr__(self):
         return f"Product: {self.asin}  - {self.title}"
-
-    def __str__(self):
-        return self.__repr__()
-
-
-@dataclass
-class Merchant():
-    id: int = field(init=False)
-    name: str
-    me: str
-    products: List[Product] = field(default_factory=list)
-
-    def __repr__(self):
-        return f"Merchant: {self.name}  - {self.me}"
 
     def __str__(self):
         return self.__repr__()
