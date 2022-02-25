@@ -22,11 +22,11 @@ def create_card(title: str, body: str, link: str) -> dbc.Card:
 def create_average_review_card(df):
     average_review_score = ["-", html.I(className="bi bi-star-fill ms-2")]
     if not df.empty:
-        score = df["product_average_review"].iloc[0]
-        average_review_score = [f"{score}/5",
-                                html.I(className="bi bi-star-fill ms-2")]
+        score = df["product_global_rating"].iloc[0]
+        average_review_score = [score]
+        print(score)
 
-    return create_card(title="Average Review Score", body=average_review_score, link="#")
+    return create_card(title="Global Rating", body=average_review_score, link="#")
 
 
 def create_number_review_card(df):

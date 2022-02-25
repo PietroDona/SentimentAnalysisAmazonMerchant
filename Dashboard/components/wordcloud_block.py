@@ -29,17 +29,21 @@ def make_word_cloud(df):
 
 def create_wordcloud_block(df: pd.DataFrame) -> dbc.Col:
     return [
-        html.H3("Product features", style=TITLE_STYLE),
-        dbc.Col([
-            html.H5("Wordcloud", style=TITLE_STYLE),
-            make_word_cloud(df)],
-            width=6,
-            id="count",
-            class_name="border"
-        ),
-        dbc.Col([
-            html.H5("Placeholder", style=TITLE_STYLE)],
-            width=6,
-            id="time",
-            class_name="border"
-        )]
+        html.H3("Product features", style=TITLE_STYLE)]
+
+# def create_wordcloud_block(df: pd.DataFrame) -> dbc.Col:
+#     return [
+#         html.H3("Product features", style=TITLE_STYLE),
+#         dbc.Col([
+#             html.H5("Wordcloud", style=TITLE_STYLE),
+#             make_word_cloud(df)],
+#             width=6,
+#             id="count",
+#             class_name="border"
+#         ),
+#         dbc.Col([
+#             html.H5("Placeholder", style=TITLE_STYLE)],
+#             width=6,
+#             id="time",
+#             class_name="border"
+#         )]

@@ -14,9 +14,11 @@ def main_scrape():
         level=logging.INFO,
     )
 
+    asin_list = ["B000X457HO", "B08TZ75LLK", "B000WQY7RO", "B000WUFVR0", "B004G9C0SQ", "B000JDGC78",
+                 "B001L2MD2E", "B001U40C6W", "B000W3V8S8", "B004TAY2Q0", "B07F7TWGGC", "B07Y92C59V", "B000TVJ6XW"]
 
-# "B082V6C83P", "B07QGWY83T", "B07DQWT15Y", "B08N5LFLC3", "B0831BF1FH"
-    asin_list = ["B000X457HO", "B000JDGC78", "B01N0RSCBI", "B000WUFVR0"]
+    asin_list = ['B000WQZ5PC', 'B000P6THK8', 'B006QOK0ZY', 'B004G9DV66', 'B01N68CWKV', 'B001D6HB0M', 'B07144XJDK',
+                 'B003U24B7S', 'B06X6H95GW', 'B0002PW0WO', 'B01MTS599T']
 
     for strasin in asin_list:
         aps = ProductDetailsScraper(asin=strasin)

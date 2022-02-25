@@ -146,12 +146,18 @@ class ProductReviewsScraper:
         content = item.find(
             "span", {"data-hook": "review-body"})
 
+        if not content:
+            return False, ""
         # check_if_translated
         translated_content = content.find(
             "span", class_="cr-original-review-content")
         if translated_content:
             return True, translated_content.get_text().strip()
-        return False, content.get_text().strip()
+
+        if not content.find("span"):
+            return False, ""
+
+        return False, content.find("span").get_text().strip()
 
     def get_clean_helpfulvote(self, item: Tag) -> int or None:
         """Clean the number of helpful votes from the HTML"""

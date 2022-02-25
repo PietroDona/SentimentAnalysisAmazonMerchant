@@ -25,7 +25,7 @@ search_bar = [
     dbc.Col([
         dcc.Dropdown(
             connect_to_database.load_product_list(),
-            'B07H256MBK',
+            connect_to_database.load_product_list()[0],
             id='productdropdown')], width=10),
     dbc.Col([
         dbc.Button([html.I(className="bi bi-plus-lg me-2"),
@@ -51,6 +51,7 @@ search_bar = [
 )
 def populate_page(value):
     df = connect_to_database.get_reviews_dataframe(value)
+    print(df.columns)
     return [product_title.create_product_title(df),
             summary_cards.create_average_review_card(df),
             summary_cards.create_number_review_card(df),
