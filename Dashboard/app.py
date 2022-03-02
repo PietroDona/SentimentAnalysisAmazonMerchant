@@ -7,7 +7,7 @@ import pandas as pd
 
 from Dashboard.styles import HEADER_STYLE, TITLE_STYLE
 
-from Dashboard import connect_to_database
+from Dashboard.components import search_bar
 from Dashboard.components import product_title
 from Dashboard.components import summary_cards
 from Dashboard.components import summary_block
@@ -21,17 +21,6 @@ from Dashboard.components import detailed_review_block
 app = Dash(external_stylesheets=[
     dbc.themes.BOOTSTRAP, dbc.icons.BOOTSTRAP])
 
-search_bar = [
-    dbc.Col([
-        dcc.Dropdown(
-            connect_to_database.load_product_list(),
-            connect_to_database.load_product_list()[0],
-            id='productdropdown')], width=10),
-    dbc.Col([
-        dbc.Button([html.I(className="bi bi-plus-lg me-2"),
-                    "Add"],
-                   outline=True, color="dark"),
-    ], width=2, class_name="d-grid gap-2")]
 
 #######################################################################
 #                           UPDATE DASHBOARD                          #
@@ -44,27 +33,32 @@ search_bar = [
      Output('card2', 'children'),
      Output('card3', 'children'),
      Output('card4', 'children'),
-     Output('summaryblock', 'children'),
+     Output('count_plot', 'children'),
+     Output('time_plot', 'children'),
+     Output('right_plot', 'children'),
      Output('wordcloudblock', 'children'),
-     Output('detailsblock', 'children')],
+     Output('detailsblock', 'children')
+     ],
     Input('productdropdown', 'value')
 )
 def populate_page(value):
-    df = connect_to_database.get_reviews_dataframe(value)
-    print(df.columns)
-    return [product_title.create_product_title(df),
-            summary_cards.create_average_review_card(df),
-            summary_cards.create_number_review_card(df),
+
+    return [product_title.create_product_title(value),
+            summary_cards.create_general_info_card(value),
+            summary_cards.create_number_review_card(value),
             summary_cards.placeholder_card(),
             summary_cards.placeholder_card(),
-            summary_block.rating_summary(df),
-            wordcloud_block.create_wordcloud_block(df),
-            detailed_review_block.create_samplereviews_block()]
+            summary_block.make_count_plot(value),
+            summary_block.make_time_plot_count(value),
+            summary_block.make_pie_plot(value),
+            wordcloud_block.create_wordcloud_block(None),
+            detailed_review_block.create_samplereviews_block(),
+            ]
+
 
 #######################################################################
 #                                LAYOUT                               #
 #######################################################################
-
 
 app.layout = dbc.Container(
     [
@@ -72,27 +66,11 @@ app.layout = dbc.Container(
             [html.H1("Amazon Products Review Analysis",
                      style=HEADER_STYLE), ]
         ),
-        dbc.Row(
-            search_bar
-        ),
-        dbc.Row(
-            "",
-            id="producttitle"
-        ),
-        dbc.Row(
-            [
-                dbc.Col("", width=3, class_name="d-grid gap-2", id="card1"),
-                dbc.Col("", width=3, class_name="d-grid gap-2", id="card2"),
-                dbc.Col("", width=3, class_name="d-grid gap-2", id="card3"),
-                dbc.Col("", width=3, class_name="d-grid gap-2", id="card4"),
-            ]
-        ),
+        search_bar.search_bar,
+        product_title.product_title,
+        summary_cards.cards_block,
         html.Hr(className="mt-4"),
-        dbc.Row(
-            "",
-            id="summaryblock",
-            class_name="mb-4"
-        ),
+        summary_block.summary_block,
         dbc.Row("",
                 id="wordcloudblock",
                 class_name="mb-4"

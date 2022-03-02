@@ -9,10 +9,57 @@ import pandas as pd
 import dash_bootstrap_components as dbc
 
 from Dashboard.styles import TITLE_STYLE
+from Dashboard import connect_to_database
 
 
-def rating_summary(df: pd.DataFrame) -> dbc.Col:
+#######################################################################
+#                                LAYOUT                               #
+#######################################################################
 
+summary_block = dbc.Row(
+    [
+        html.H3("Reviews summary", style=TITLE_STYLE),
+        dbc.Col([
+            html.H5("Reviews distribution", style=TITLE_STYLE),
+            html.Div("", id="count_plot")],
+            width=3
+        ),
+        dbc.Col([
+            html.H5("Reviews in time", style=TITLE_STYLE),
+            dbc.Checklist(
+                options=[
+                    {"label": "Monthly Average", "value": 0},
+                ],
+                value=[1],
+                id="switch_monthly",
+                switch=True,
+                style={"position": "absolute",
+                       "top": "1em",
+                       "right": "1em"
+                       }
+            ),
+            html.Div("", id="time_plot")],
+            width=6,
+            id="time",
+            style={"position": "relative"}
+        ),
+        dbc.Col([
+            html.H5("Reviews verified", style=TITLE_STYLE),
+            html.Div("", id="right_plot")],
+            width=3,
+            id="helpful"
+        )],
+    id="summaryblock",
+    class_name="mb-4"
+)
+
+#######################################################################
+#                              FUNCTIONS                              #
+#######################################################################
+
+
+def make_count_plot(strasin: str) -> dcc.Graph:
+    df = connect_to_database.get_reviews_df(strasin)
     df_tmp = df['review_rating'].value_counts().sort_index()
     df_ratings = pd.DataFrame(
         {'Rating': df_tmp.index, 'Count': df_tmp.values})
@@ -32,6 +79,11 @@ def rating_summary(df: pd.DataFrame) -> dbc.Col:
         figure=fig_bar
     )
 
+    return countplot
+
+
+def make_pie_plot(strasin: str) -> dcc.Graph:
+    df = connect_to_database.get_reviews_df(strasin)
     df_tmp = df['review_verified'].value_counts().sort_index()
     translate = {False: "Not Verified", True: "Verified"}
     df_tmp.index = [translate[label] for label in df_tmp.index]
@@ -49,77 +101,40 @@ def rating_summary(df: pd.DataFrame) -> dbc.Col:
         figure=fig_pie
     )
 
-    tmp_df = df.copy()
-    tmp_df['review_date'] = pd.to_datetime(tmp_df['review_date'])
-    df_tmp = tmp_df.groupby(pd.Grouper(key='review_date', freq='M')).count()
-    monthly_df = pd.DataFrame(
-        {'Date': df_tmp.index, 'Count': df_tmp.review_rating})
-    # df_tmp.review_rating.cumsum()
-    df_tmp = tmp_df.groupby(pd.Grouper(key='review_date', freq='M')).mean()
-    rev_monthly_df = pd.DataFrame(
-        {'Date': df_tmp.index, 'Mean': df_tmp.review_rating})
-    # fig_time = px.line(monthly_df, x="Date", y="Count",
-    #                    title='Review/Time')
+    return pieplot
 
+
+def make_time_plot_count(strasin: str) -> dcc.Graph:
     # Create figure with secondary y-axis
-    fig_time = make_subplots(specs=[[{"secondary_y": True}]])
+    weekly_df = connect_to_database.get_weekly_df(strasin)
 
+    fig_time = make_subplots(rows=2, cols=1,
+                             shared_xaxes=True,
+                             vertical_spacing=0.02)
     fig_time.update_layout(template='plotly_white',
-                           margin=dict(t=0))
+                           margin=dict(t=0), showlegend=False)
 
-    # Add traces
-    fig_time.add_trace(
-        go.Scatter(x=monthly_df["Date"],
-                   y=monthly_df["Count"], name="Number of reviews"),
-        #px.line(monthly_df, x="Date", y="Count"),
-        secondary_y=False,
-    )
+    fig_time.add_trace(go.Scatter(x=weekly_df["Date"],
+                                  y=weekly_df["Count"],
+                                  name="Number of reviews"),
+                       row=1, col=1)
+    fig_time.add_trace(go.Scatter(x=weekly_df["Date"],
+                                  y=weekly_df["Mean"],
+                                  name="Average Rating"),
+                       row=2, col=1)
 
-    # Add traces
-    fig_time.add_trace(
-        go.Scatter(x=rev_monthly_df["Date"],
-                   y=rev_monthly_df["Mean"], name="Average rating"),
-        #px.line(rev_monthly_df, x="Date", y="Mean"),
-        secondary_y=True,
-    )
-
-    fig_time.update_yaxes(
-        title_text="Reviews", secondary_y=False)
-    fig_time.update_yaxes(
-        title_text="Rating", secondary_y=True)
+    fig_time.update_yaxes(title_text="Number of Reviews", row=1, col=1)
+    fig_time.update_yaxes(title_text="Average Rating", row=2, col=1)
 
     fig_time.update_xaxes(showline=True, linewidth=1,
                           linecolor='black')  # , mirror=True)
     fig_time.update_yaxes(showline=True, linewidth=1,
                           linecolor='black')  # , mirror=True)
 
-    fig_time.update_layout(legend=dict(
-        yanchor="top",
-        y=0.99,
-        xanchor="left",
-        x=0.01
-    ))
-
     timeplot = dcc.Graph(
         id='reviewtimeplot',
-        figure=fig_time
+        figure=fig_time,
+        # height="50%"
     )
 
-    return [
-        html.H3("Reviews summary", style=TITLE_STYLE),
-        dbc.Col([
-            html.H5("Reviews distribution", style=TITLE_STYLE),
-            countplot],
-            width=3,
-            id="count"
-        ),
-        dbc.Col([html.H5("Reviews in time", style=TITLE_STYLE),
-                 timeplot],
-                width=6,
-                id="time"
-                ),
-        dbc.Col([html.H5("Reviews verified", style=TITLE_STYLE),
-                 pieplot],
-                width=3,
-                id="helpful"
-                )]
+    return timeplot
