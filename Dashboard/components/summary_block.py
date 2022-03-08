@@ -20,8 +20,9 @@ summary_block = dbc.Row(
     [
         html.H3("Reviews summary", style=TITLE_STYLE),
         dbc.Col([
-            html.H5("Reviews distribution", style=TITLE_STYLE),
-            html.Div("", id="count_plot")],
+            html.H5("Ratings (all time)", style=TITLE_STYLE),
+            dbc.Col("", id="count_plot")
+        ],
             width=3
         ),
         dbc.Col([
@@ -44,14 +45,16 @@ summary_block = dbc.Row(
             style={"position": "relative"}
         ),
         dbc.Col([
-            html.H5("Reviews verified", style=TITLE_STYLE),
+            html.H5("Ratings (rencent, 2022)", style=TITLE_STYLE),
             html.Div("", id="right_plot")],
             width=3,
             id="helpful"
-        )],
+        )
+    ],
     id="summaryblock",
     class_name="mb-4"
 )
+
 
 #######################################################################
 #                              FUNCTIONS                              #
@@ -59,10 +62,8 @@ summary_block = dbc.Row(
 
 
 def make_count_plot(strasin: str) -> dcc.Graph:
-    df = connect_to_database.get_reviews_df(strasin)
-    df_tmp = df['review_rating'].value_counts().sort_index()
-    df_ratings = pd.DataFrame(
-        {'Rating': df_tmp.index, 'Count': df_tmp.values})
+    df_ratings = connect_to_database.get_rating_df(strasin)
+
     fig_bar = px.bar(df_ratings, x='Rating', y='Count',
                      barmode='group')  # , height=400)
 
@@ -82,26 +83,26 @@ def make_count_plot(strasin: str) -> dcc.Graph:
     return countplot
 
 
-def make_pie_plot(strasin: str) -> dcc.Graph:
-    df = connect_to_database.get_reviews_df(strasin)
-    df_tmp = df['review_verified'].value_counts().sort_index()
-    translate = {False: "Not Verified", True: "Verified"}
-    df_tmp.index = [translate[label] for label in df_tmp.index]
-    df_verified = pd.DataFrame(
-        {'Verified': df_tmp.index, 'Count': df_tmp.values})
+def make_count_plot_verified(strasin: str) -> dcc.Graph:
+    df_ratings = connect_to_database.get_rating_df(strasin)
 
-    fig_pie = px.pie(df_verified, names='Verified',
-                     values='Count')
+    fig_bar = px.bar(df_ratings, x='Rating', y='CountRecent',
+                     barmode='group')  # , height=400)
 
-    fig_pie.update_layout(template='plotly_white',
+    fig_bar.update_layout(template='plotly_white',
                           margin=dict(t=0))
+    fig_bar.update_xaxes(tickvals=[1, 2, 3, 4, 5])
+    fig_bar.update_xaxes(showline=True, linewidth=1,
+                         linecolor='black')
+    fig_bar.update_yaxes(showline=True, linewidth=1,
+                         linecolor='black')
 
-    pieplot = dcc.Graph(
-        id='pieplot',
-        figure=fig_pie
+    countplot = dcc.Graph(
+        id='countplot',
+        figure=fig_bar
     )
 
-    return pieplot
+    return countplot
 
 
 def make_time_plot_count(strasin: str) -> dcc.Graph:

@@ -67,6 +67,67 @@ def create_general_info_card(value):
     )
 
 
+def create_aspect_card(value):
+    df = connect_to_database.get_aspects_review_value_df(value)
+    NormalizationPolarity = df[[
+        'PositivePolarity', 'NeutralPolarity', 'NegativePolarity']].sum(axis="columns")
+    df[['PositivePolarityP', 'NeutralPolarityP',
+        'NegativePolarityP']] = df[['PositivePolarity', 'NeutralPolarity',
+                                    'NegativePolarity']].div(NormalizationPolarity, axis='rows')
+    NormalizationRating = df[[
+        'PositiveRating', 'NeutralRating', 'NegativeRating']].sum(axis="columns")
+    df[['PositiveRatingP', 'NeutralRatingP', 'NegativeRatingP']] = df[['PositiveRating',
+                                                                       'NeutralRating', 'NegativeRating']].div(NormalizationRating, axis='rows')
+    [PosPol, PosPolPer] = list(df[df["PositivePolarityP"] == df["PositivePolarityP"].max()]
+                               [["ClusterName", "PositivePolarity"]].iloc[0])
+    [NegPol, NegPolPer] = list(df[df["NegativePolarityP"] == df["NegativePolarityP"].max()][["ClusterName",
+                                                                                             "NegativePolarity"]].iloc[0])
+    [PosRat, PosRatPer] = list(df[df["PositiveRatingP"] == df["PositiveRatingP"].max()][["ClusterName",
+                                                                                         "PositiveRating"]].iloc[0])
+    [NegRat, NegRatPer] = list(df[df["NegativeRatingP"] == df["NegativeRatingP"].max()][["ClusterName",
+                                                                                         "NegativeRating"]].iloc[0])
+    return dbc.Card(
+        dbc.Row(
+            [
+                dbc.Col(dbc.CardBody([
+                    html.Div(f"{PosPol} ({PosPolPer})",
+                             className="fs-5 rounded my-2",
+                             style={
+                                 "background-color": "rgb(153, 213, 191)"},
+                             ),
+                    html.Div(f"{NegPol} ({NegPolPer})",
+                             className="fs-5 rounded  my-2",
+                             style={
+                                 "background-color": "rgb(255, 105, 97)"},
+                             ),
+                    html.P("Best/Worst Sentiment",
+                           className="card-text mt-2 fs-6 text-center",
+                           ),
+                ]),
+                    class_name=" text-center", width=6),
+                dbc.Col(dbc.CardBody([
+                    html.Div(f"{PosRat} ({PosRatPer})",
+                             className="fs-5 rounded my-2",
+                             style={
+                                 "background-color": "rgb(153, 213, 191)"},
+                             ),
+                    html.Div(f"{NegRat} ({NegRatPer})",
+                             className="fs-5 rounded  my-2",
+                             style={
+                                 "background-color": "rgb(255, 105, 97)"},
+                             ),
+                    html.P("Best/Worst Rated",
+                           className="card-text mt-2 fs-6 text-center",
+                           ),
+                ]),
+                    class_name=" text-center", width=6),
+                dbc.Col(dbc.CardBody(html.A(
+                    "More details", href="#aspectblock", className="btn btn-outline-primary w-100 mt-2"), class_name="py-1"))
+            ]
+        )
+    )
+
+
 def create_number_review_card(value):
     df_summary = connect_to_database.get_review_summary_df(value)
     review_mean = round(df_summary["Mean"].iloc[0], 2)
@@ -81,7 +142,7 @@ def create_number_review_card(value):
             [
                 dbc.Col([dbc.CardBody([
                     html.P(review_mean,
-                           className="card-text fs-1 rounded-circle px-2 py-3",
+                           className="card-text fs-1 rounded-circle px-2 py-3 text-center",
                            style={"background-color": "#febd69",
                                   "aspect-ratio": "1"},
                            ),
@@ -124,6 +185,7 @@ def placeholder_card():
                     html.P("Placeholder Card",
                            className="card-text fs-5",
                            ),
+                    html.A("LINK", href="#aspectblock")
 
                 ]
             ),

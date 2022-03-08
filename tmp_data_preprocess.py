@@ -1,8 +1,21 @@
+from SentimentAnalysis.aspect_clustering import extract_aspects
 import ProductReviewScraper.amazon_review_database as db
 from ProductReviewScraper.models import Review, Product
 import pandas as pd
 from pathlib import Path
 import unidecode
+from wordcloud import WordCloud
+
+
+def my_rating_count(df):
+    rating_series = df['review_rating']
+    five = (rating_series == 5).sum()
+    four = (rating_series == 4).sum()
+    three = (rating_series == 3).sum()
+    two = (rating_series == 2).sum()
+    one = (rating_series == 1).sum()
+
+    return [one, two, three, four, five]
 
 
 def make_product_list():
@@ -108,7 +121,11 @@ def make_summary(df, strasin):
         key='review_date', freq='W')).count()
 
     dfrecent = df[df['review_date'] >= "2022-1-1"]
-
+    df_ratings = pd.DataFrame(
+        {'Rating': [1, 2, 3, 4, 5],
+         'Count': my_rating_count(df),
+         'CountRecent': my_rating_count(dfrecent),
+         })
     summary_reviews = pd.DataFrame(
         {'Mean': [df.review_rating.mean()],
          'RevWeek': [df_count.review_rating.mean()],
@@ -118,11 +135,38 @@ def make_summary(df, strasin):
     product_path = Path(f"data/{strasin}")
     summary_reviews.to_csv(product_path / "summary_reviews.csv", index=False)
 
+    df_ratings.to_csv(product_path / "rating_reviews.csv", index=False)
+
+
+def make_word_cloud(df, strasin):
+    words = list(df['review_content'])
+    fulltext = " ".join(words)
+    # Create the wordcloud object
+    wordcloud = WordCloud(background_color=None,
+                          width=480, height=360).generate(fulltext)
+    wordcloud_svg = wordcloud.to_svg(embed_font=True)
+    product_path = Path(f"data/{strasin}")
+    filepath = product_path / "wordcloud.svg"
+    with filepath.open("w", encoding="utf-8") as f:
+        f.write(wordcloud_svg)
+
 
 if __name__ == "__main__":
     produc_list = make_product_list()
     for product in produc_list:
-        make_product_info_df(product)
         review_df = make_review_df(product)
-        make_summary(review_df, product)
-        make_weekly_summary(review_df, product)
+        if len(review_df) > 2000:
+            make_product_info_df(product)
+            make_summary(review_df, product)
+            make_weekly_summary(review_df, product)
+            make_word_cloud(review_df, product)
+            extract_aspects(review_df, product)
+# B08TZ75LLK
+# B07F7TWGGC
+# B004TAY2Q0
+# B004G9DV66
+# B003U24B7S
+# B01N68CWKV
+# B01MTS599T
+# B001D6HB0M
+# B000WQZ5PC
