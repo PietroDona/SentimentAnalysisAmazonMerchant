@@ -31,7 +31,7 @@ summary_block = dbc.Row(
                 options=[
                     {"label": "Monthly Average", "value": 0},
                 ],
-                value=[1],
+                value=[],
                 id="switch_monthly",
                 switch=True,
                 style={"position": "absolute",
@@ -105,7 +105,7 @@ def make_count_plot_verified(strasin: str) -> dcc.Graph:
     return countplot
 
 
-def make_time_plot_count(strasin: str) -> dcc.Graph:
+def make_time_plot_count(strasin: str, monthly: list) -> dcc.Graph:
     # Create figure with secondary y-axis
     weekly_df = connect_to_database.get_weekly_df(strasin)
 
@@ -115,12 +115,17 @@ def make_time_plot_count(strasin: str) -> dcc.Graph:
     fig_time.update_layout(template='plotly_white',
                            margin=dict(t=0), showlegend=False)
 
+    if monthly:
+        average = "Averaged"
+    else:
+        average = ""
+
     fig_time.add_trace(go.Scatter(x=weekly_df["Date"],
-                                  y=weekly_df["Count"],
+                                  y=weekly_df[average+"Count"],
                                   name="Number of reviews"),
                        row=1, col=1)
     fig_time.add_trace(go.Scatter(x=weekly_df["Date"],
-                                  y=weekly_df["Mean"],
+                                  y=weekly_df[average+"Mean"],
                                   name="Average Rating"),
                        row=2, col=1)
 

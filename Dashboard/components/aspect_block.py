@@ -49,7 +49,7 @@ def make_word_cloud(strasin: str) -> dbc.Col:
 
     return html.Img(
         src="data:image/svg+xml;charset=utf-8, " + image_svg,
-        className="img-fluid"
+        className="img-fluid w-100"
     ),
 
 
@@ -67,7 +67,9 @@ def row_name(aspects, sizes, color, cluster_name):
 def make_clusters(strasin: str) -> dbc.Col:
     df = connect_to_database.get_cluster_aspects_review_df(strasin)
     colors = ["#79addc", "#ffc09f", "#ffee93", "#fcf5c7", "#adf7b6"]
-    cluster_name = [df[f"Name{id}"].iloc[0].title() for id in range(5)]
+
+    tmp_name = connect_to_database.get_aspects_review_value_df(strasin)
+    cluster_name = list(tmp_name.sort_values(by=["Cluster"])["ClusterName"])
     return [row_name(df[f"Name{id}"], df[f"Count{id}"],
                      colors[id], cluster_name[id]) for id in range(5)]
 
@@ -184,7 +186,7 @@ def make_ratings(strasin: str):
     x_data = [list(df.query(f"Cluster=={id}")[
         ["PositiveRating", "NeutralRating", "NegativeRating"]].iloc[0]) for id in range(5)]
 
-    y_data = ["Scent", "Buy", "Strong", "Candle", "Burn"]
+    y_data = df['ClusterName']
 
     fig = go.Figure()
 

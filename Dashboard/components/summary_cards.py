@@ -1,8 +1,9 @@
+from click import style
 from dash import html, dcc
 import dash_bootstrap_components as dbc
 
 from Dashboard import connect_to_database
-
+from Dashboard import styles
 
 #######################################################################
 #                                LAYOUT                               #
@@ -186,6 +187,36 @@ def placeholder_card():
                            className="card-text fs-5",
                            ),
                     html.A("LINK", href="#aspectblock")
+
+                ]
+            ),
+        ],
+    )
+
+# review_user,review_rating,review_title,review_date,review_verified,review_content,review_helpful_vote
+
+
+def random_review(value):
+    df = connect_to_database.get_reviews_df(value).sample(1)
+    return dbc.Card(
+        [
+            dbc.CardBody(
+                [
+                    dbc.Row(dbc.Col(df["review_title"],
+                                    className="fw-bold text-truncate"),
+                            ),
+                    #  < span class="badge badge-secondary" > New < /span >
+                    dbc.Row([dbc.Col([html.I(className="bi bi-star-fill text-warning")]
+                                     * df["review_rating"].iloc[0], width=4),
+                             dbc.Col(
+                                 f"{df['review_helpful_vote'].iloc[0]} times helpful", width=4),
+                             dbc.Col(df["review_date"].iloc[0], width=4, class_name="text-end")],
+                            class_name="my-1"),
+                    dbc.Row(dbc.Col(html.P(df["review_content"],
+                                           style=styles.THREELINES),),
+                            ),
+                    html.A("Read more", href="https://www.amazon.com/gp/customer-reviews/" + df["review_amazonid"].iloc[0], target="blank",
+                           className="btn btn-outline-primary w-100")
 
                 ]
             ),

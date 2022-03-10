@@ -71,12 +71,12 @@ def extract_aspects(dfproduct, strasin):
     negrating = aspectsdfclustered.query("review_rating<3")[
         "cluster"].value_counts()
 
-    clusternames = [cluster0.values[0], cluster1.values[0], cluster2.values[0],
-                    cluster3.values[0], cluster4.values[0]]
+    clusternames = [cluster0.index[0], cluster1.index[0], cluster2.index[0],
+                    cluster3.index[0], cluster4.index[0]]
 
     polaritycount = pd.DataFrame({
         "Cluster": pospolarity.index,
-        "ClusterName": clusternames,
+        "ClusterName": [clusternames[idx] for idx in pospolarity.index],
         "PositivePolarity": pospolarity.values,
         "NeutralPolarity": neupolarity.values,
         "NegativePolarity": negpolarity.values,

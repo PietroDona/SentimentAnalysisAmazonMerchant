@@ -10,3 +10,7 @@ TITLE_STYLE = {
     "padding": "1rem",
     "color": "#131a22"
 }
+
+
+THREELINES = {"height": "4.5rem",
+              "overflow": "auto"}
