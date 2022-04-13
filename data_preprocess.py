@@ -155,7 +155,7 @@ def make_word_cloud(df, strasin):
         f.write(wordcloud_svg)
 
 
-if __name__ == "__main__":
+def analyse_all():
     produc_list = make_product_list()
     for product in produc_list:
         review_df = make_review_df(product)
@@ -165,3 +165,7 @@ if __name__ == "__main__":
             make_weekly_summary(review_df, product)
             make_word_cloud(review_df, product)
             extract_aspects(review_df, product)
+
+
+if __name__ == "__main__":
+    analyse_all()

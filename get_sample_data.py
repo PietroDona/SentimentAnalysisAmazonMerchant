@@ -8,6 +8,7 @@ from ProductReviewScraper.amazon_product_scraper import ProductDetailsScraper
 from ProductReviewScraper.amazon_review_scraper import ProductReviewsScraper
 import ProductReviewScraper.amazon_review_database as db
 import logging
+import data_preprocess
 
 
 def example_scrape():
@@ -40,3 +41,4 @@ def example_scrape():
 
 if __name__ == "__main__":
     example_scrape()
+    data_preprocess.analyse_all()
