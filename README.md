@@ -30,10 +30,18 @@ Export the current directory to PYTHONPATH
 `export PYTHONPATH=$PYTHONPATH:/path/to/this/dir`
 
 If you want to prepare some example data run
+
 `python get_sample_data.py`
 
 If you want to collect the reviews of a specific product, make sure you know the ASIN number and run
+
 `python add_product.py`
+
+If you have the data analyzed, you can run the dashboard with
+
+`python Dashboard/app.py`
+
+and visit the [webpage](http://127.0.0.1:8050/)
 
 # Data collection
 
