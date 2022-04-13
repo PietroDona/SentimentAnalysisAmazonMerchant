@@ -4,6 +4,9 @@
 # Test notebooks
 test.ipynb
 
+# Database
+reviews.db
+
 # Environment
 scrapeamazon/
 

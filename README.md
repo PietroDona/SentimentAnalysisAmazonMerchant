@@ -37,8 +37,12 @@ If you want to collect the reviews of a specific product, make sure you know the
 
 # Data collection
 
+[Click here for the data collection details](ProductReviews/README.md)
+
 # Aspect extraction
 
-Sentiment analysis aims at dentifying and categorize the sentiment in piece of text.
+[Click here for the aspects extractions details](SentimentAnalysis/README.md)
 
 # Dashboard visualization
+
+[Click here for the dashboards details](Dashboard/README.md)

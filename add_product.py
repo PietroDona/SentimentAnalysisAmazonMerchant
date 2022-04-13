@@ -2,9 +2,9 @@
 Module to add a Product to the database and the dashboard
 '''
 
-from ProductReviewScraper.amazon_product_scraper import ProductDetailsScraper
-from ProductReviewScraper.amazon_review_scraper import ProductReviewsScraper
-import ProductReviewScraper.amazon_review_database as db
+from ProductReviews.amazon_product_scraper import ProductDetailsScraper
+from ProductReviews.amazon_review_scraper import ProductReviewsScraper
+import ProductReviews.amazon_review_database as db
 import logging
 
 import data_preprocess

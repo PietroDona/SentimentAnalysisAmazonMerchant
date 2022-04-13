@@ -3,8 +3,8 @@ Module to process the scraped data
 '''
 
 from SentimentAnalysis.aspect_clustering import extract_aspects
-import ProductReviewScraper.amazon_review_database as db
-from ProductReviewScraper.models import Review, Product
+import ProductReviews.amazon_review_database as db
+from ProductReviews.models import Review, Product
 import pandas as pd
 from pathlib import Path
 import unidecode
