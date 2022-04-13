@@ -1,6 +1,6 @@
 # SentimentAnalysisAmazonMerchant
 
-<img src="banner.svg">
+<img src="banner.png">
 # Business problem
 
 Sentiment analysis aims at dentifying and categorize the sentiment in piece of text.
