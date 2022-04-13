@@ -1,3 +1,7 @@
+'''
+Module to process the scraped data
+'''
+
 from SentimentAnalysis.aspect_clustering import extract_aspects
 import ProductReviewScraper.amazon_review_database as db
 from ProductReviewScraper.models import Review, Product
@@ -161,12 +165,3 @@ if __name__ == "__main__":
             make_weekly_summary(review_df, product)
             make_word_cloud(review_df, product)
             extract_aspects(review_df, product)
-# B08TZ75LLK
-# B07F7TWGGC
-# B004TAY2Q0
-# B004G9DV66
-# B003U24B7S
-# B01N68CWKV
-# B01MTS599T
-# B001D6HB0M
-# B000WQZ5PC

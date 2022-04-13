@@ -1,12 +1,9 @@
-
+'''
+Component details for the new product modal.
+Not yet implemented
+'''
 import dash_bootstrap_components as dbc
 from dash import html
-
-# from ProductReviewScraper.amazon_product_scraper import ProductDetailsScraper
-# from ProductReviewScraper.amazon_review_scraper import ProductReviewsScraper
-# import ProductReviewScraper.amazon_review_database as db
-# import tmp_data_preprocess
-# import logging
 
 alert_div = dbc.Alert([dbc.Spinner(), "Loading, please wait ... "],
                       id="status_alert",
@@ -33,10 +30,12 @@ new_product_modal = html.Div(
             [
                 dbc.ModalHeader(dbc.ModalTitle("Add a new product")),
                 dbc.ModalBody([
-                    #html.Div("Add the ASIN of the product you want to analyze:"),
                     dbc.Input(
                         id="productinput", placeholder="Product ASIN to analyze", type="text"),
-                    dbc.Col("It can take a while", class_name="mt-2"), ]
+                    dbc.Col("It can take a while", class_name="mt-2"),
+                    dbc.Col("NOT YET IMPLEMENTED",
+                            class_name="mt-2 text-danger text-center"),
+                    dbc.Col("Please execute the script add_product.py in the source directory to add a new product", class_name="mt-2 text-danger"), ]
                 ),
                 dbc.ModalFooter(
                     [dbc.Col(dbc.Button("Add product", id="addproduct", class_name="w-100", n_clicks=0)),
@@ -48,38 +47,3 @@ new_product_modal = html.Div(
         ),
     ], className="w-100"
 )
-
-
-# async def download_reviews(strasin):
-#     print("Download reviews")
-#     logging.basicConfig(
-#         filename="scrape.log",
-#         filemode="w",
-#         format="%(asctime)s AMAZON-SCRAPER: %(message)s",
-#         level=logging.INFO,
-#     )
-
-#     aps = ProductDetailsScraper(asin=strasin)
-#     product = aps.get_product_info()
-
-#     ars = ProductReviewsScraper(
-#         asin=product.asin, sort="recent"
-#     )
-#     reviews = ars.get_reviews()
-
-#     missing_review = [r for r in reviews if r not in product.reviews]
-#     product.reviews += missing_review
-
-#     db.session.add(product)
-#     db.session.add_all(reviews)
-#     db.session.commit()
-
-
-# def preprocess_data(product):
-#     review_df = tmp_data_preprocess.make_review_df(product)
-#     if len(review_df) > 2000:
-#         tmp_data_preprocess.make_product_info_df(product)
-#         tmp_data_preprocess.make_summary(review_df, product)
-#         tmp_data_preprocess.make_weekly_summary(review_df, product)
-#         tmp_data_preprocess.make_word_cloud(review_df, product)
-#         tmp_data_preprocess.extract_aspects(review_df, product)

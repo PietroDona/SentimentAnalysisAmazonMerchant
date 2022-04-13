@@ -1,5 +1,13 @@
-from click import style
-from dash import html, dcc
+'''
+Top component with four summary cards
+card1 - general informations
+card2 - product characteristics
+card3 - reviews info
+card4 - example review
+'''
+
+
+from dash import html
 import dash_bootstrap_components as dbc
 
 from Dashboard import connect_to_database

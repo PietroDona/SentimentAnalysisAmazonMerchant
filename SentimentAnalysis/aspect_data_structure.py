@@ -1,3 +1,7 @@
+'''
+Dataclass to describe the aspect and keep track of which rule was used to extract it 
+'''
+
 from dataclasses import dataclass, field
 
 

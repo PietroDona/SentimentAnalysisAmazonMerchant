@@ -1,3 +1,8 @@
+'''
+Dataclasses used in the webscrapers
+Converted into ORM models for sqlalchemy in amazon_review_database.py
+'''
+
 from dataclasses import dataclass, field
 from datetime import date
 from typing import Optional, List

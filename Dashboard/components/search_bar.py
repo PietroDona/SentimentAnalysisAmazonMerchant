@@ -1,11 +1,13 @@
+'''
+ASIN searchbar component
+'''
 
-from dash import dcc, html
-
+from dash import dcc
 import dash_bootstrap_components as dbc
 
 from Dashboard import connect_to_database
-
 from Dashboard.components import newproduct
+
 #######################################################################
 #                                LAYOUT                               #
 #######################################################################

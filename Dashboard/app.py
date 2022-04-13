@@ -1,9 +1,12 @@
+'''
+Main dashboard, execute to run webserver
+Dashsboard developed in Dash - Plotly
+The on screen component are stored in the components directory
+'''
+
 from dash import Dash, html, callback_context
 from dash import Input, Output, State
-
-
 import dash_bootstrap_components as dbc
-
 from Dashboard.styles import HEADER_STYLE
 
 from Dashboard.components import search_bar
@@ -13,23 +16,16 @@ from Dashboard.components import summary_block
 from Dashboard.components import aspect_block
 from Dashboard.components import newproduct
 
-# import asyncio
-# import diskcache
-# from dash.long_callback import DiskcacheLongCallbackManager
-# cache = diskcache.Cache("./cache")
-# long_callback_manager = DiskcacheLongCallbackManager(cache)
 
 #######################################################################
-#                             SEARCH  BAR                             #
+#                             DEFINE APP                              #
 #######################################################################
 
 app = Dash(external_stylesheets=[
     dbc.themes.BOOTSTRAP, dbc.icons.BOOTSTRAP],)
-#   long_callback_manager=long_callback_manager)
-
 
 #######################################################################
-#                           UPDATE DASHBOARD                          #
+#                            UPDATE LAYOUT                            #
 #######################################################################
 
 
@@ -50,6 +46,7 @@ app = Dash(external_stylesheets=[
     State('switch_monthly', 'value')
 )
 def populate_page(value, monthly):
+    '''Populate the dashboard with the data of the product with ASIN stored in value'''
 
     return [product_title.create_product_title(value),
             summary_cards.create_general_info_card(value),
@@ -65,7 +62,7 @@ def populate_page(value, monthly):
             ]
 
 #######################################################################
-#                             NEW PRODUCT                             #
+#                          NEW PRODUCT  MODAL                         #
 #######################################################################
 
 
@@ -86,26 +83,6 @@ def toggle_modal(n1, n2, conf,  is_open, prodcutasin):
     return [is_open, ""]
 
 
-# @app.long_callback(
-#     output=Output("placeholder", "children"),
-#     #output=Output("status_success", "is_open"),
-#     inputs=Input("addproduct", "n_clicks"),
-#     running=[
-#         (Output("status_alert", "is_open"),  True, False),
-#         # (Output("status_success", "is_open"),  False, True),
-#         (Output("open", "disabled"), True, False),
-#     ],
-#     state=State("productinput", "value")
-# )
-# def callback(n_clicks, asininput):
-#     changed_id = [p['prop_id'] for p in callback_context.triggered][0]
-#     if asininput and changed_id == 'addproduct.n_clicks':
-#         asyncio.run(newproduct.download_reviews(asininput.strip()))
-#         return "Banana"
-#     return "Kiwi"
-
-# B001U40C6W
-# B000WQY7RO
 #######################################################################
 #                                LAYOUT                               #
 #######################################################################
@@ -126,8 +103,6 @@ app.layout = dbc.Container(
         summary_block.summary_block,
         html.Hr(className="mt-4"),
         aspect_block.aspect_block,
-        # html.Hr(className="mt-4"),
-        # detailed_review_block.detailed_review_block,
     ], fluid=True
 )
 

@@ -1,3 +1,6 @@
+'''
+General styling used in some dashboard components
+'''
 HEADER_STYLE = {
     "textAlign": "center",
     "background": "#febd69",

@@ -1,4 +1,8 @@
-# custom review container
+'''
+Module to scrape the products and reviews of a selected sample set
+"B000WQY7RO", "B001U40C6W", "B09LD7WRVS", "B06XF2TR11", "B010OYASRG"
+of randomly selected products from different categories
+'''
 
 from ProductReviewScraper.amazon_product_scraper import ProductDetailsScraper
 from ProductReviewScraper.amazon_review_scraper import ProductReviewsScraper
@@ -6,7 +10,7 @@ import ProductReviewScraper.amazon_review_database as db
 import logging
 
 
-def main_scrape():
+def example_scrape():
     logging.basicConfig(
         filename="scrape.log",
         filemode="w",
@@ -35,4 +39,4 @@ def main_scrape():
 
 
 if __name__ == "__main__":
-    main_scrape()
+    example_scrape()

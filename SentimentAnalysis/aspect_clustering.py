@@ -1,3 +1,9 @@
+'''
+Module to cluster the product review aspects
+using KMeans algorithm. We choose 5 clusters conventionally
+it will be improved with an automatic elbow analysis in a future update
+'''
+
 from sklearn.cluster import KMeans
 import pandas as pd
 from SentimentAnalysis import aspect_estraction

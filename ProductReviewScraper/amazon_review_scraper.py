@@ -1,3 +1,7 @@
+'''
+Web scraper of the Amazon product reviews
+ProductReviewsScraper - Class containig the review scraper
+'''
 # http requests and HTML parsing
 import requests
 from bs4 import BeautifulSoup as bsoup
@@ -173,14 +177,3 @@ class ProductReviewsScraper:
             .replace(".", "")
         )
         return int(helpfulvote_number)
-
-
-if __name__ == "__main__":
-    logging.basicConfig(
-        filename="scrape_review.log",
-        filemode="w",
-        format="%(asctime)s AMAZON-SCRAPER: %(message)s",
-        level=logging.INFO,
-    )
-    ars = ProductReviewsScraper(asin="B082V6C83P", sort="recent", max_scrape=2)
-    print(ars.get_page(21))

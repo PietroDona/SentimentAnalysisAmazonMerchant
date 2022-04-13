@@ -1,3 +1,7 @@
+'''
+Web scraper of the Amazon product details
+ProductDetailsScraper - Class containig the scraper
+'''
 # http requests and HTML parsing
 import requests
 from bs4 import BeautifulSoup as bsoup
@@ -10,7 +14,7 @@ import logging
 
 
 class ProductDetailsScraper:
-    """Class that scrape the reviews of the product with given asin from the amazon website"""
+    '''Class that scrape the reviews of the product with given asin from the amazon website'''
 
     def __init__(
         self,
@@ -21,11 +25,11 @@ class ProductDetailsScraper:
         self.product = None
 
     def get_url(self) -> str:
-        """Formatting of the reviews URL"""
+        '''Formatting of the reviews URL'''
         return f"{BASEURL_PRODUCT}/{self.asin}"
 
     def _get_product_info(self) -> None:
-        """Scrape the product info from the Amazon Website"""
+        '''Scrape the product info from the Amazon Website'''
         # URL to scrape
         url_to_scrape = self.get_url()
         #
@@ -57,17 +61,3 @@ class ProductDetailsScraper:
         if not self.product:
             self._get_product_info()
         return self.product
-
-
-if __name__ == "__main__":
-    logging.basicConfig(
-        filename="scrape_review.log",
-        filemode="w",
-        format="%(asctime)s AMAZON-SCRAPER: %(message)s",
-        level=logging.INFO,
-    )
-    aps = ProductDetailsScraper(asin="B082V6C83P")
-    product = aps.get_product_info()
-    print(product.max_reviews)
-    print(product.reviews)
-    print(product.price)

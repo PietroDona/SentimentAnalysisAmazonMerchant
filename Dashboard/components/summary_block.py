@@ -1,11 +1,15 @@
+'''
+Component that summarize the informations about the product ratings
+left panel - count_plot - Count plot of the ratings
+center panel - time_plot - Evolution in time of the rating sampled weekly or monthly
+right panel - right_plot - Count plot of the ratings from January 2022
+'''
+
 from dash import dcc, html
 import plotly.express as px
 import plotly.graph_objects as go
 
 from plotly.subplots import make_subplots
-
-import pandas as pd
-
 import dash_bootstrap_components as dbc
 
 from Dashboard.styles import TITLE_STYLE

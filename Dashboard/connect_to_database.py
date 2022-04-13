@@ -1,3 +1,7 @@
+'''
+Load data from preanalyzed csv in the data directory
+'''
+
 import pandas as pd
 
 

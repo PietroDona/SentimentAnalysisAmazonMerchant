@@ -1,3 +1,11 @@
+'''
+Rules to perform the Aspect extraction based on the paper
+    A Rule-Based Approach to Aspect Extraction from Product Reviews
+    Poria, Soujanya & Cambria, Erik & Ku, Lun-Wei & Gui, Chen & Gelbukh, Alexander
+    SocialNLP. 2014. 10.3115/v1/W14-5905.
+Implemented using spacy and the senticnet dataset
+'''
+
 from SentimentAnalysis.aspect_data_structure import Aspect
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 import spacy

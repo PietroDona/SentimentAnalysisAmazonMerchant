@@ -1,10 +1,17 @@
-import pandas as pd
+'''
+Component that summarize the informations about the product features
+left panel - wordcloud - Most used words in the reviews
+center panel - clusters - Description of the features of the product clusters extracted by the NLP algorithm
+right panel - aspectanalysis - Count plot of the ratings from January 2022
+'''
+
 from dash import dcc, html
 import dash_bootstrap_components as dbc
 from Dashboard.styles import TITLE_STYLE
 from Dashboard import connect_to_database
 from pathlib import Path
 import plotly.graph_objects as go
+
 #######################################################################
 #                                LAYOUT                               #
 #######################################################################

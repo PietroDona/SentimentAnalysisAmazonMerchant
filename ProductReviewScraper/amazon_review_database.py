@@ -1,3 +1,7 @@
+'''
+Interface to the sqlite database using sqlalchemy
+'''
+
 from ProductReviewScraper.models import Product, Review
 from ProductReviewScraper.config import DBNAME
 from sqlalchemy import create_engine, MetaData, Table
