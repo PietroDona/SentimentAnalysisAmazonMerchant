@@ -1,18 +1,24 @@
-# ARTICLES
-https://www.kaggle.com/adityapatil673/critical-assessment-amazon-reviews-on-kindle?scriptVersionId=4591977
-https://www.datacamp.com/community/tutorials/simplifying-sentiment-analysis-python
-https://towardsdatascience.com/a-beginners-guide-to-sentiment-analysis-in-python-95e354ea84f6
-https://algorithmia.com/blog/using-machine-learning-for-sentiment-analysis-a-deep-dive
+# Analyze Amazon.com Product Reviews
 
-# COURSES
-https://github.com/Maha41/Sentiment-analysis-on-Amazon-Reviews-using-Python
+This package extracts aspects (or product features) from the reviews content and infer the associated polarity. Consider for example the review of this candle
 
+`**Smells** yummy but started to **burn unevenly** halfway thru (couldn't keep it lit anymore). But **gorgeous** for gifting!!`
 
+The review consists of three aspects with three different opinions. The smell and the manufacture of the product are rated very positive, however these is a problem with the burning of the candle. The overall rating is 4/5.
 
-https://github.com/umaraju18/Capstone_project_2/blob/master/code/Amazon_headphones_Sentiment_Analysis_CV_IF_IDF_HASH.ipynb
+The code is a python implementation of
+[A Rule-Based Approach to Aspect Extraction from Product Reviews.
+Poria, Soujanya & Cambria, Erik & Ku, Lun-Wei & Gui, Chen & Gelbukh, Alexander.
+SocialNLP. 2014. 10.3115/v1/W14-5905.](literature/A_Rule-Based_Approach_to_Aspect_Extraction_from_Product_Reviews.pdf)
 
+The division in sentences of the reviews and the part of speech (POS) and dependences (DEP) are done using the NLP library [spacy](https://spacy.io). The 8 semantic rules suggested in the literature are implemented in python. Please read [this notebook](notebooks/AspectExtraction.ipynb) for a more in depth analysis and test.
 
-https://towardsdatascience.com/sentiment-analysis-on-amazon-reviews-45cd169447ac
-https://medium.com/analytics-vidhya/text-analysis-on-the-reviews-data-of-indian-products-in-amazon-a9c21709c4d8
+A polarity score is associated to each aspect by applying `nltk` VADER SentimentIntensityAnalyzer to the parent sentence.
 
-https://github.com/aeddeb/Detecting-Fake-Reviews-using-Unsupervised-Learning
+To interpret the aspect extraction procedure on thousands of reviews is necessary to group them by meaning. We use KMeans clustering analysis applied to the vectorial representation of the aspects to group them automatically. For example, among the reviews of a candle the follwing aspects are extracted
+
+-   scent
+-   fragrance
+-   aroma
+-   smell
+    They are clearly referring to the same feature of the product: the smell. It makes sense to consider them as one single group from the point of view of a product analysis. KMeans is the simplest option at our disposals but is perform surprisingly well.
