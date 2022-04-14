@@ -7,8 +7,8 @@ import requests
 from bs4 import BeautifulSoup as bsoup
 
 # custom review container
-from ProductReviewScraper.models import Product
-from ProductReviewScraper.config import HEADERS, BASEURL_PRODUCT
+from ProductReview.models import Product
+from ProductReview.config import HEADERS, BASEURL_PRODUCT
 
 import logging
 

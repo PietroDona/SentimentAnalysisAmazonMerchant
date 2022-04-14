@@ -41,7 +41,7 @@ If you have the data analyzed, you can run the dashboard with
 
 `python Dashboard/app.py`
 
-and visit the [webpage](http://127.0.0.1:8050/)
+and visit the [webpage](http://127.0.0.1:8050/).
 
 # Data collection
 

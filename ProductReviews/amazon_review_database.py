@@ -2,8 +2,8 @@
 Interface to the sqlite database using sqlalchemy
 '''
 
-from ProductReviewScraper.models import Product, Review
-from ProductReviewScraper.config import DBNAME
+from ProductReview.models import Product, Review
+from ProductReview.config import DBNAME
 from sqlalchemy import create_engine, MetaData, Table
 from sqlalchemy import Column, Integer, String, Float, Date, Boolean, ForeignKey
 from sqlalchemy.orm import sessionmaker, registry, relationship

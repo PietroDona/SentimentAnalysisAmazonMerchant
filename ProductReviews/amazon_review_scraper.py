@@ -14,8 +14,8 @@ from typing import List
 from time import sleep
 
 # custom review container
-from ProductReviewScraper.models import Review
-from ProductReviewScraper.config import HEADERS, BASEURL_REVIEW, DELAY
+from ProductReview.models import Review
+from ProductReview.config import HEADERS, BASEURL_REVIEW, DELAY
 
 import logging
 

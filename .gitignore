@@ -4,8 +4,6 @@
 # Test notebooks
 test.ipynb
 
-# Database
-reviews.db
 
 # Environment
 scrapeamazon/
@@ -16,3 +14,7 @@ __pycache__/
 
 # data
 data/
+
+# Database
+
+*.db
