@@ -21,4 +21,5 @@ To interpret the aspect extraction procedure on thousands of reviews is necessar
 -   fragrance
 -   aroma
 -   smell
-    They are clearly referring to the same feature of the product: the smell. It makes sense to consider them as one single group from the point of view of a product analysis. KMeans is the simplest option at our disposals but is perform surprisingly well.
+
+They are clearly referring to the same feature of the product: the smell. It makes sense to consider them as one single group from the point of view of a product analysis. KMeans is the simplest option at our disposals but is perform surprisingly well.
